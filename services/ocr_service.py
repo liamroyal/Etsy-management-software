@@ -4,9 +4,24 @@ from typing import Dict, Optional, Tuple, List
 from PIL import Image
 import io
 import os
-import cv2
-import numpy as np
 from io import BytesIO
+
+# Try to import optional dependencies with graceful fallback
+try:
+    import cv2
+    import numpy as np
+    CV2_AVAILABLE = True
+except ImportError as e:
+    CV2_AVAILABLE = False
+    cv2 = None
+    np = None
+
+try:
+    import pytesseract
+    PYTESSERACT_AVAILABLE = True
+except ImportError:
+    PYTESSERACT_AVAILABLE = False
+    pytesseract = None
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -20,27 +35,37 @@ class OCRService:
     def _set_tesseract_path(self):
         """Set tesseract path for different installation methods"""
         try:
-            import pytesseract
-            
+            if not PYTESSERACT_AVAILABLE:
+                return
+                
             # Common tesseract paths
             possible_paths = [
                 '/opt/homebrew/bin/tesseract',  # Homebrew on Apple Silicon
                 '/usr/local/bin/tesseract',     # Homebrew on Intel
                 '/usr/bin/tesseract',           # System package managers
+                'tesseract',                    # System PATH (cloud environments)
             ]
             
             for path in possible_paths:
-                if os.path.exists(path):
+                if path == 'tesseract' or os.path.exists(path):
                     pytesseract.pytesseract.tesseract_cmd = path
                     logger.debug(f"Set tesseract path to: {path}")
                     break
-        except ImportError:
+        except Exception as e:
+            logger.debug(f"Could not set tesseract path: {str(e)}")
             pass
         
     def _check_tesseract(self) -> bool:
         """Check if tesseract is available"""
         try:
-            import pytesseract
+            if not PYTESSERACT_AVAILABLE:
+                logger.warning("pytesseract module not available")
+                return False
+            
+            if not CV2_AVAILABLE:
+                logger.warning("opencv (cv2) module not available")
+                return False
+                
             # Test if tesseract command is available
             pytesseract.get_tesseract_version()
             logger.info("Tesseract OCR is available and ready to use")
@@ -124,8 +149,9 @@ class OCRService:
     def _extract_text_with_coordinates(self, image: Image.Image) -> Dict:
         """Extract text with bounding box coordinates"""
         try:
-            import pytesseract
-            
+            if not PYTESSERACT_AVAILABLE:
+                raise Exception("pytesseract not available")
+                
             # Convert to RGB if necessary
             if image.mode != 'RGB':
                 image = image.convert('RGB')
