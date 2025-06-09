@@ -1,6 +1,5 @@
 # Sensitive files
 credentials.json
-config.py
 *.env
 
 # Python
