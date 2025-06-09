@@ -7,3 +7,5 @@ google-auth-httplib2==0.2.0
 google-api-python-client==2.120.0
 python-dateutil==2.9.0
 email-validator==2.1.1
+Pillow==10.2.0
+pytesseract==0.3.10
