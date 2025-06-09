@@ -1,0 +1,140 @@
+[
+  {
+    "id": "96b71aa1-756a-40a8-aa85-1d42e7d1d26e",
+    "carrier_name": "USPS",
+    "etsy_approved": true,
+    "example_tracking": "9405511899564298845722",
+    "alternative_text": ""
+  },
+  {
+    "id": "4fb1140a-b68f-4ad0-9df7-43a7e7abbc61",
+    "carrier_name": "UPS",
+    "etsy_approved": true,
+    "example_tracking": "1Z12345E0205271688"
+  },
+  {
+    "id": "8bb91e96-3862-4620-a711-84daa442942a",
+    "carrier_name": "FedEx",
+    "etsy_approved": true,
+    "example_tracking": "1234567890123456"
+  },
+  {
+    "id": "432e3a7b-2d85-4853-bcec-17ae751e6514",
+    "carrier_name": "DHL",
+    "etsy_approved": true,
+    "example_tracking": "00340434663098171443",
+    "alternative_text": ""
+  },
+  {
+    "id": "1317bf40-418e-47e9-ac6b-158a0c9509df",
+    "carrier_name": "Canada Post",
+    "etsy_approved": true,
+    "example_tracking": "1234567890123456"
+  },
+  {
+    "id": "f54c0395-0c60-4e4d-8b80-9658f187e19a",
+    "carrier_name": "Royal Mail",
+    "etsy_approved": true,
+    "example_tracking": "AB123456789GB"
+  },
+  {
+    "id": "abca77e4-8505-4fd9-a89e-78bb5b70ffc5",
+    "carrier_name": "Australia Post",
+    "etsy_approved": true,
+    "example_tracking": "33XJK415581401000931502",
+    "alternative_text": ""
+  },
+  {
+    "id": "a399ac59-45da-46e5-929d-0db72c78d64f",
+    "carrier_name": "LaserShip",
+    "etsy_approved": false,
+    "example_tracking": "1LS12345678901234567",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "e263a343-20aa-419c-b705-d068a66f4ac1",
+    "carrier_name": "Evri",
+    "etsy_approved": true,
+    "example_tracking": "T01E7A0017531404"
+  },
+  {
+    "id": "53d97996-a915-4796-9892-712d56fc267d",
+    "carrier_name": "GoFo Express",
+    "etsy_approved": false,
+    "example_tracking": "GF6073467540724",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "0f182678-095b-4b0a-b336-7fa5072a42f5",
+    "carrier_name": "Yun Express",
+    "etsy_approved": false,
+    "example_tracking": "YT2515400709720235",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "8fe281ea-8225-457c-bcd4-62bb54f9fb08",
+    "carrier_name": "Yodel",
+    "etsy_approved": true,
+    "example_tracking": "JJD0002232957480528"
+  },
+  {
+    "id": "aa61d166-9254-45cc-8aa8-d551ceb1cf01",
+    "carrier_name": "eMile",
+    "etsy_approved": false,
+    "example_tracking": "EM200000509180CA",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "c4ff0904-0b60-473f-b749-ca7717b529d2",
+    "carrier_name": "USPS",
+    "etsy_approved": true,
+    "example_tracking": "4208632555699200190373170177555565"
+  },
+  {
+    "id": "ed1f29d1-f06c-43e3-a968-ef3f1f022cf1",
+    "carrier_name": "Cainiao",
+    "etsy_approved": false,
+    "example_tracking": "CNUSUP00018516905",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "1cf96eb3-b2ed-4c4f-86e6-1558050b6303",
+    "carrier_name": "SpeedX",
+    "etsy_approved": false,
+    "example_tracking": "SPXBOS030203891801",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "0f49d9d3-5159-4550-a210-1f5655bb42f7",
+    "carrier_name": "Posti",
+    "etsy_approved": true,
+    "example_tracking": "JJFI67077070006151830"
+  },
+  {
+    "id": "f67d1a77-030f-4ec5-92db-4ff75f796e8f",
+    "carrier_name": "UniUni (UNI Express)",
+    "etsy_approved": true,
+    "example_tracking": "JY25CAA0U006748459"
+  },
+  {
+    "id": "4a9b6171-2178-4246-a258-48c2ea601b95",
+    "carrier_name": "Yanwen Logistics",
+    "etsy_approved": false,
+    "example_tracking": "YWORD010045168550",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "7527ccb8-9aac-4f25-ade7-c980e0217a06",
+    "carrier_name": "Too Express",
+    "etsy_approved": false,
+    "example_tracking": "TEP00043431368",
+    "alternative_text": "DHL"
+  },
+  {
+    "id": "d78d63f2-173c-4041-894a-e73a20a85bbc",
+    "carrier_name": "Cirro",
+    "etsy_approved": false,
+    "example_tracking": "CIFR5225600858648",
+    "alternative_text": "DHL"
+  }
+]

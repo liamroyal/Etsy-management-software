@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange-50: #fff7ed;
+            --orange-100: #ffedd5;
+            --orange-200: #fed7aa;
+            --orange-500: #f97316;
+            --orange-600: #ea580c;
+            --orange-700: #c2410c;
+            
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            
+            --green-50: #f0fdf4;
+            --green-500: #22c55e;
+            --red-50: #fef2f2;
+            --red-500: #ef4444;
+            --yellow-50: #fffbeb;
+            --yellow-500: #f59e0b;
+            --blue-50: #eff6ff;
+            --blue-500: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--slate-50);
+            color: var(--slate-800);
+            line-height: 1.5;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-layout {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--slate-800) 0%, var(--slate-900) 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--slate-700);
+        }
+        
+        .sidebar-header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sidebar-header p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: var(--slate-400);
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+        
+        .nav-section {
+            margin-bottom: 32px;
+        }
+        
+        .nav-section-title {
+            padding: 0 20px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--slate-400);
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--slate-300);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+        
+        .nav-item.active {
+            background: var(--orange-500);
+            color: white;
+            box-shadow: inset 4px 0 0 var(--orange-400);
+        }
+        
+        .nav-item.active:hover {
+            background: var(--orange-600);
+        }
+        
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--slate-700);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--orange-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .user-details h4 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .user-details p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--slate-400);
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .content-header {
+            padding: 24px 32px;
+            background: white;
+            border-bottom: 1px solid var(--slate-200);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .content-header h2 {
+            margin: 0 0 4px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+        
+        .content-header p {
+            margin: 0;
+            color: var(--slate-500);
+            font-size: 14px;
+        }
+        
+        .content-body {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            background: var(--slate-50);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+
+        
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        
+        .flash {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 4px solid;
+        }
+        
+        .flash.success {
+            background: var(--green-50);
+            color: #166534;
+            border-left-color: var(--green-500);
+        }
+        
+        .flash.error {
+            background: var(--red-50);
+            color: #991b1b;
+            border-left-color: var(--red-500);
+        }
+        
+        .flash.warning {
+            background: var(--yellow-50);
+            color: #92400e;
+            border-left-color: var(--yellow-500);
+        }
+        
+        .flash.info {
+            background: var(--blue-50);
+            color: #1e40af;
+            border-left-color: var(--blue-500);
+        }
+        
+        .page-content {
+            display: none;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--slate-100);
+        }
+        
+        .section-title {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--slate-800);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-description {
+            margin: 0 0 20px 0;
+            color: var(--slate-500);
+            font-size: 14px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--slate-700);
+            font-size: 14px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--slate-300);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--orange-500);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .btn {
+            background: var(--orange-500);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn:hover {
+            background: var(--orange-600);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(249, 115, 22, 0.2);
+        }
+        
+        .btn-secondary {
+            background: var(--slate-100);
+            color: var(--slate-700);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--slate-200);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-danger {
+            background: var(--red-500);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1px solid var(--slate-300);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            background: white url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23cbd5e1'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E") no-repeat 12px center;
+            background-size: 20px;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--orange-500);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+        
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .product-table th {
+            background: var(--slate-50);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--slate-700);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--slate-200);
+        }
+        
+        .product-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--slate-100);
+            vertical-align: middle;
+        }
+        
+        .product-table tr:hover {
+            background: var(--orange-50);
+        }
+        
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid var(--slate-200);
+        }
+        
+        .product-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 0 auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: calc(100vh - 40px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            background: var(--slate-50);
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--slate-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+        
+        .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--slate-400);
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .close:hover {
+            background: var(--slate-100);
+            color: var(--slate-600);
+        }
+        
+        .modal-body {
+            padding: 24px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 16px 24px;
+            background: var(--slate-50);
+            border-top: 1px solid var(--slate-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            cursor: pointer;
+        }
+        
+        .lightbox img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+        }
+        
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--slate-500);
+            background: var(--slate-50);
+            border-radius: 8px;
+            border: 2px dashed var(--slate-200);
+        }
+        
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 768px) {
+            .app-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                min-height: auto;
+                position: relative;
+            }
+            
+            .sidebar-nav {
+                padding: 16px 0;
+            }
+            
+            .nav-section {
+                margin-bottom: 24px;
+            }
+            
+            .content-header {
+                padding: 16px 20px;
+            }
+            
+            .content-body {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 16px;
+            }
+            
+            .product-table {
+                font-size: 13px;
+            }
+            
+            .product-image {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .modal-content {
+                margin: 10% 16px;
+                width: auto;
+            }
+            
+            .todo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .todo-actions {
+                opacity: 1;
+            }
+        }
+        
+        /* Todo-specific styles */
+        .todo-counter {
+            background: var(--orange-500);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: auto;
+            min-width: 18px;
+            text-align: center;
+        }
+        
+        .todo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .todo-card {
+            background: var(--slate-50);
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .todo-card:hover {
+            border-color: var(--orange-300);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .todo-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .todo-checkbox-container {
+            flex-shrink: 0;
+        }
+        
+        .todo-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--slate-300);
+            border-radius: 4px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+        }
+        
+        .todo-checkbox:hover {
+            border-color: var(--green-500);
+            background: var(--green-50);
+        }
+        
+        .checkbox-icon {
+            width: 14px;
+            height: 14px;
+            color: var(--green-500);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .todo-checkbox:hover .checkbox-icon {
+            opacity: 1;
+        }
+        
+        .todo-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--slate-800);
+            flex: 1;
+            line-height: 1.3;
+        }
+        
+        .todo-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .todo-card:hover .todo-actions {
+            opacity: 1;
+        }
+        
+        .todo-action-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: none;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--slate-500);
+        }
+        
+        .todo-action-btn:hover {
+            background: var(--slate-200);
+            color: var(--slate-700);
+        }
+        
+        .todo-action-btn.todo-delete:hover {
+            background: var(--red-50);
+            color: var(--red-600);
+        }
+        
+        .icon-sm {
+            width: 14px;
+            height: 14px;
+        }
+        
+        .todo-description {
+            margin: 8px 0;
+            color: var(--slate-600);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .todo-footer {
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid var(--slate-200);
+        }
+        
+        .todo-date {
+            font-size: 12px;
+            color: var(--slate-400);
+        }
+        
+        @media (max-width: 768px) {
+            .todo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .todo-actions {
+                opacity: 1;
+            }
+        }
+        
+        /* Carrier specific styles */
+        .approval-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .approval-badge.approved {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .approval-badge.not-approved {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+        
+        .tracking-example {
+            background-color: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            color: #475569;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            accent-color: #ea580c;
+        }
+        
+        .checkmark {
+            margin-left: 0.25rem;
+        }
+        
+        .carrier-row {
+            transition: background-color 0.2s;
+        }
+        
+        .carrier-row:hover {
+            background-color: #f8fafc;
+        }
+        
+        .alternative-text {
+            color: #2563eb;
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        .text-muted {
+            color: #9ca3af;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>🛍️ Order Manager</h1>
+                <p>Business Operations Platform</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Data Management</div>
+                    <button class="nav-item active" onclick="switchPage('excel-upload', this)">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                        </svg>
+                        Excel Upload
+                    </button>
+                    <button class="nav-item" onclick="switchPage('bulk-orders', this)">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Bulk Orders
+                    </button>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Automation</div>
+                    <button class="nav-item" onclick="switchPage('email-automation', this)">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                        </svg>
+                        Email Scanner
+                    </button>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Catalog</div>
+                    <button class="nav-item" onclick="switchPage('product-catalog', this)">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                        Products
+                    </button>
+                    <button class="nav-item" onclick="switchPage('shipping-carriers', this)">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        Shipping Carriers
+                        {% if carrier_stats and carrier_stats.total > 0 %}
+                            <span class="todo-counter">{{ carrier_stats.total }}</span>
+                        {% endif %}
+                    </button>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Productivity</div>
+                    <button class="nav-item" onclick="switchPage('todo-notes', this)">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        Notes & Todos
+                        {% if todo_stats and todo_stats.active > 0 %}
+                            <span class="todo-counter">{{ todo_stats.active }}</span>
+                        {% endif %}
+                    </button>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">LR</div>
+                    <div class="user-details">
+                        <h4>Liam Royal</h4>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h2 id="page-title">Excel Upload</h2>
+                <p id="page-description">Upload order data from Excel files and automatically sync with Google Sheets</p>
+            </div>
+            
+            <div class="content-body">
+                <!-- Flash Messages -->
+                <div class="flash-messages">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="flash {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                
+                <div class="container">
+        
+        <!-- Excel Upload Page -->
+        <div id="excel-upload" class="page-content active">
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                    </svg>
+                    Upload Excel File
+                </h3>
+                <p class="section-description">Upload order data from Excel files (.xlsx, .xls) and automatically sync with Google Sheets</p>
+                <form action="{{ url_for('upload_excel') }}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="current_page" value="excel-upload">
+                    <div class="form-group">
+                        <label for="excel-file">Choose Excel File</label>
+                        <input type="file" id="excel-file" name="file" accept=".xlsx,.xls" required>
+                    </div>
+                    <button type="submit" class="btn">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                        </svg>
+                        Process File
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Email Automation Page -->
+        <div id="email-automation" class="page-content">
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                    </svg>
+                    Email Configuration
+                </h3>
+                <p class="section-description">Configure email scanning settings for automated order detection</p>
+                <form action="{{ url_for('configure_email') }}" method="post">
+                    <input type="hidden" name="current_page" value="email-automation">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="email-address">Email Address</label>
+                            <input type="email" id="email-address" name="email_address" placeholder="orders@yourstore.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="scan-frequency">Scan Frequency</label>
+                            <select id="scan-frequency" name="scan_frequency">
+                                <option value="15">Every 15 minutes</option>
+                                <option value="30" selected>Every 30 minutes</option>
+                                <option value="60">Every hour</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="filter-keywords">Filter Keywords</label>
+                            <input type="text" id="filter-keywords" name="filter_keywords" placeholder="order, purchase, payment" value="order, purchase, payment">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Save Configuration</button>
+                </form>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    Manual Scan
+                </h3>
+                <p class="section-description">Trigger an immediate email scan to check for new orders</p>
+                <form action="{{ url_for('scrape_email') }}" method="post">
+                    <input type="hidden" name="current_page" value="email-automation">
+                    <button type="submit" class="btn btn-secondary">Scan Now</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Bulk Orders Page -->
+        <div id="bulk-orders" class="page-content">
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Bulk Order Entry
+                </h3>
+                <p class="section-description">Format: Product Name | Quantity | Customer Email</p>
+                <form action="{{ url_for('process_bulk_orders') }}" method="post">
+                    <input type="hidden" name="current_page" value="bulk-orders">
+                    <div class="form-group">
+                        <label for="bulk-orders-text">Order Data</label>
+                        <textarea id="bulk-orders-text" name="bulk_orders" placeholder="Handmade Scarf | 2 | customer1@email.com&#10;Wooden Bowl | 1 | customer2@email.com" rows="6" required></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="default-price">Default Price (NZD)</label>
+                            <input type="number" id="default-price" name="default_price" step="0.01" placeholder="25.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="order-date">Order Date</label>
+                            <input type="date" id="order-date" name="order_date" value="{{ current_date }}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Process Orders</button>
+                </form>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    Tracking Update
+                </h3>
+                <p class="section-description">Format: #3695239669 UK216203823YP</p>
+                <form action="{{ url_for('bulk_update') }}" method="post">
+                    <input type="hidden" name="current_page" value="bulk-orders">
+                    <div class="form-group">
+                        <label for="bulk-tracking">Order & Tracking Pairs</label>
+                        <textarea id="bulk-tracking" name="bulk_orders" placeholder="#3695239669 UK216203823YP&#10;#3695239670 UK216203824YP" rows="6"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Update Tracking</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Product Catalog Page -->
+        <div id="product-catalog" class="page-content">
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Add New Product
+                </h3>
+                <form action="{{ url_for('add_product') }}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="current_page" value="product-catalog">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="product-name">Product Name</label>
+                            <input type="text" id="product-name" name="product_name" placeholder="Handmade Ceramic Mug" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-price">Price (NZD)</label>
+                            <input type="number" id="product-price" name="product_price" step="0.01" placeholder="25.00" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="listing-link">Listing Link</label>
+                            <input type="url" id="listing-link" name="listing_link" placeholder="https://etsy.com/listing/your-product">
+                        </div>
+                        <div class="form-group">
+                            <label for="sourcing-type">Sourcing Type</label>
+                            <select id="sourcing-type" name="sourcing_type" onchange="toggleSourcingData()">
+                                <option value="">Select sourcing type</option>
+                                <option value="link">Fulfillment Link</option>
+                                <option value="agent">Agent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sourcing-data">Sourcing Data</label>
+                            <input type="text" id="sourcing-data" name="sourcing_data" placeholder="Enter link or agent details">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="product-image">Product Image</label>
+                            <input type="file" id="product-image" name="product_image" accept="image/*" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Add Product</button>
+                </form>
+            </div>
+            
+            {% if ocr_available %}
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    Extract from Screenshot
+                </h3>
+                <p class="section-description">Upload a screenshot to automatically extract multiple products using OCR</p>
+                <form action="{{ url_for('extract_product') }}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="current_page" value="product-catalog">
+                    <div class="form-group">
+                        <label for="screenshot">Screenshot Image</label>
+                        <input type="file" id="screenshot" name="screenshot" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Extract Products</button>
+                </form>
+            </div>
+            {% endif %}
+            
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                    Product Inventory
+                </h3>
+                <input type="text" id="product-search" class="search-box" placeholder="Search products..." onkeyup="filterProducts()">
+                
+                {% if products %}
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Listing</th>
+                                <th>Sourcing</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                                <tr class="product-row" data-name="{{ product.name.lower() }}">
+                                    <td>
+                                        <img src="{{ url_for('get_product_image', filename=product.image) }}" 
+                                             alt="{{ product.name }}" 
+                                             class="product-image"
+                                             onclick="openLightbox(this.src, '{{ product.name }}')">
+                                    </td>
+                                    <td>{{ product.name }}</td>
+                                    <td>NZD ${{ "%.2f"|format(product.price_nzd) }}</td>
+                                    <td>
+                                        {% if product.listing_link %}
+                                            <a href="{{ product.listing_link }}" target="_blank" style="color: var(--orange-600);">View Listing</a>
+                                        {% else %}
+                                            <span style="color: var(--slate-400);">No link</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if product.sourcing_type == 'link' and product.sourcing_data %}
+                                            <a href="{{ product.sourcing_data }}" target="_blank" style="color: var(--blue-600);">Fulfillment Link</a>
+                                        {% elif product.sourcing_type == 'agent' and product.sourcing_data %}
+                                            <span style="color: var(--green-600);">Agent: {{ product.sourcing_data }}</span>
+                                        {% else %}
+                                            <span style="color: var(--slate-400);">Not set</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="product-actions">
+                                            <button class="btn btn-secondary btn-sm" 
+                                                    data-product-id="{{ product.id }}"
+                                                    data-product-name="{{ product.name }}"
+                                                    data-product-price="{{ product.price_nzd }}"
+                                                    data-listing-link="{{ product.listing_link or '' }}"
+                                                    data-sourcing-type="{{ product.sourcing_type or '' }}"
+                                                    data-sourcing-data="{{ product.sourcing_data or '' }}"
+                                                    onclick="openEditModalFromData(this)">
+                                                Edit
+                                            </button>
+                                            <form style="display: inline;" action="{{ url_for('delete_product') }}" method="post">
+                                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                <input type="hidden" name="current_page" value="product-catalog">
+                                                <button type="submit" class="btn btn-danger btn-sm" 
+                                                        onclick="return confirm('Delete {{ product.name }}?')">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🛍️</div>
+                        <p><strong>No products found</strong></p>
+                        <p>Add your first product using the form above</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Todo/Notes Page -->
+        <div id="todo-notes" class="page-content">
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Add New Note/Todo
+                </h3>
+                <p class="section-description">Create note cards for things you need to remember to do</p>
+                <form action="{{ url_for('add_todo') }}" method="post">
+                    <input type="hidden" name="current_page" value="todo-notes">
+                    <div class="form-group">
+                        <label for="todo-title">Title</label>
+                        <input type="text" id="todo-title" name="todo_title" placeholder="Follow up with customer..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="todo-description">Description (optional)</label>
+                        <textarea id="todo-description" name="todo_description" placeholder="Additional details..." rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Add Todo
+                    </button>
+                </form>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    Your Notes & Todos
+                    {% if todo_stats %}
+                        <span class="todo-counter">{{ todo_stats.active }} active</span>
+                    {% endif %}
+                </h3>
+                
+                {% if todos %}
+                    <div class="todo-grid">
+                        {% for todo in todos %}
+                            <div class="todo-card">
+                                <div class="todo-header">
+                                    <div class="todo-checkbox-container">
+                                        <form action="{{ url_for('complete_todo') }}" method="post" 
+                                              onsubmit="return confirmComplete('{{ todo.title }}')">
+                                            <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                                            <input type="hidden" name="current_page" value="todo-notes">
+                                            <button type="submit" class="todo-checkbox" title="Mark as complete">
+                                                <svg class="checkbox-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <h4 class="todo-title">{{ todo.title }}</h4>
+                                    <div class="todo-actions">
+                                        <button class="todo-action-btn" title="Edit" 
+                                                onclick="openEditTodo('{{ todo.id }}', '{{ todo.title|e }}', '{{ todo.description|e }}')">
+                                            <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </button>
+                                        <form style="display: inline;" action="{{ url_for('delete_todo') }}" method="post" 
+                                              onsubmit="return confirm('Delete this todo?')">
+                                            <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                                            <input type="hidden" name="current_page" value="todo-notes">
+                                            <button type="submit" class="todo-action-btn todo-delete" title="Delete">
+                                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                {% if todo.description %}
+                                    <p class="todo-description">{{ todo.description }}</p>
+                                {% endif %}
+                                <div class="todo-footer">
+                                    <span class="todo-date">Created: {{ todo.created_at[:10] }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p><strong>No todos yet</strong></p>
+                        <p>Add your first note or todo using the form above</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Shipping Carriers Page -->
+        <div id="shipping-carriers" class="page-content">
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Add New Carrier
+                </h3>
+                <p class="section-description">Add shipping carriers and track their Etsy approval status</p>
+                <form action="{{ url_for('add_carrier') }}" method="post">
+                    <input type="hidden" name="current_page" value="shipping-carriers">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="carrier-name">Carrier Name</label>
+                            <input type="text" id="carrier-name" name="carrier_name" placeholder="FedEx, UPS, USPS..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="example-tracking">Example Tracking Number</label>
+                            <input type="text" id="example-tracking" name="example_tracking" placeholder="1Z12345E0205271688" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="etsy-approved" name="etsy_approved">
+                                <span class="checkmark"></span>
+                                Etsy Approved Carrier
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Add Carrier
+                    </button>
+                </form>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Add Alternative Carrier
+                </h3>
+                <p class="section-description">Add a custom carrier option with your own text description</p>
+                <form action="{{ url_for('add_alternative_carrier') }}" method="post">
+                    <input type="hidden" name="current_page" value="shipping-carriers">
+                    <div class="form-group">
+                        <label for="alternative-text">Alternative Carrier Description</label>
+                        <input type="text" id="alternative-text" name="alternative_text" placeholder="e.g., Hand delivery, Local pickup, Custom arrangement..." required>
+                    </div>
+                    <button type="submit" class="btn">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Add Alternative Carrier
+                    </button>
+                </form>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                    Carrier Database
+                    {% if carrier_stats %}
+                        <span class="todo-counter">{{ carrier_stats.etsy_approved }}/{{ carrier_stats.total }} approved</span>
+                    {% endif %}
+                </h3>
+                <input type="text" id="carrier-search" class="search-box" placeholder="Search carriers..." onkeyup="filterCarriers()">
+                
+                {% if carriers %}
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>Shipping Carrier</th>
+                                <th>Etsy Approved</th>
+                                <th>Example Tracking Number</th>
+                                <th>Alternative Text</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for carrier in carriers %}
+                                <tr class="carrier-row" data-name="{{ carrier.carrier_name.lower() }}">
+                                    <td><strong>{{ carrier.carrier_name }}</strong></td>
+                                    <td>
+                                        {% if carrier.etsy_approved %}
+                                            <span class="approval-badge approved">✅ Yes</span>
+                                        {% else %}
+                                            <span class="approval-badge not-approved">❌ No</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <code class="tracking-example">{{ carrier.example_tracking }}</code>
+                                    </td>
+                                    <td>
+                                        {% if carrier.alternative_text %}
+                                            <span class="alternative-text">{{ carrier.alternative_text }}</span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="product-actions">
+                                            <button class="btn btn-secondary btn-sm" 
+                                                    data-carrier-id="{{ carrier.id }}"
+                                                    data-carrier-name="{{ carrier.carrier_name }}"
+                                                    data-etsy-approved="{{ carrier.etsy_approved }}"
+                                                    data-example-tracking="{{ carrier.example_tracking }}"
+                                                    data-alternative-text="{{ carrier.alternative_text if carrier.alternative_text else '' }}"
+                                                    onclick="openEditCarrierModal(this)">
+                                                Edit
+                                            </button>
+                                            <form style="display: inline;" action="{{ url_for('delete_carrier') }}" method="post">
+                                                <input type="hidden" name="carrier_id" value="{{ carrier.id }}">
+                                                <input type="hidden" name="current_page" value="shipping-carriers">
+                                                <button type="submit" class="btn btn-danger btn-sm" 
+                                                        onclick="return confirm('Delete {{ carrier.carrier_name }}?')">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🚚</div>
+                        <p><strong>No carriers found</strong></p>
+                        <p>Add your first shipping carrier using the form above</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Carrier Modal -->
+    <div id="edit-carrier-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Carrier</h3>
+                <button class="close" onclick="closeEditCarrierModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-carrier-form" action="{{ url_for('edit_carrier') }}" method="post">
+                    <input type="hidden" id="edit-carrier-id" name="carrier_id">
+                    <input type="hidden" name="current_page" value="shipping-carriers">
+                    <div class="form-group">
+                        <label for="edit-carrier-name">Carrier Name</label>
+                        <input type="text" id="edit-carrier-name" name="carrier_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-example-tracking">Example Tracking Number</label>
+                        <input type="text" id="edit-example-tracking" name="example_tracking" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="edit-etsy-approved" name="etsy_approved">
+                            <span class="checkmark"></span>
+                            Etsy Approved Carrier
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-alternative-text">Alternative Text (optional)</label>
+                        <input type="text" id="edit-alternative-text" name="alternative_text" placeholder="Custom description for alternative carriers">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditCarrierModal()">Cancel</button>
+                <button type="submit" form="edit-carrier-form" class="btn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Todo Modal -->
+    <div id="edit-todo-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Todo</h3>
+                <button class="close" onclick="closeEditTodoModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-todo-form" action="{{ url_for('edit_todo') }}" method="post">
+                    <input type="hidden" id="edit-todo-id" name="todo_id">
+                    <input type="hidden" name="current_page" value="todo-notes">
+                    <div class="form-group">
+                        <label for="edit-todo-title">Title</label>
+                        <input type="text" id="edit-todo-title" name="todo_title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-todo-description">Description</label>
+                        <textarea id="edit-todo-description" name="todo_description" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditTodoModal()">Cancel</button>
+                <button type="submit" form="edit-todo-form" class="btn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Product Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Product</h3>
+                <button class="close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form" action="{{ url_for('edit_product') }}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="edit-product-id" name="product_id">
+                    <input type="hidden" name="current_page" value="product-catalog">
+                    <div class="form-group">
+                        <label for="edit-product-name">Product Name</label>
+                        <input type="text" id="edit-product-name" name="product_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-product-price">Price (NZD)</label>
+                        <input type="number" id="edit-product-price" name="product_price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-product-image">Product Image (optional)</label>
+                        <input type="file" id="edit-product-image" name="product_image" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-listing-link">Listing Link</label>
+                        <input type="url" id="edit-listing-link" name="listing_link">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-sourcing-type">Sourcing Type</label>
+                        <select id="edit-sourcing-type" name="sourcing_type" onchange="toggleEditSourcingData()">
+                            <option value="">Select sourcing type</option>
+                            <option value="link">Fulfillment Link</option>
+                            <option value="agent">Agent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-sourcing-data">Sourcing Data</label>
+                        <input type="text" id="edit-sourcing-data" name="sourcing_data" placeholder="Enter link or agent details">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                <button type="submit" form="edit-form" class="btn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-image" src="" alt="">
+    </div>
+    
+    <script>
+        // Page switching
+        function switchPage(pageName, navItem) {
+            // Hide all page content
+            document.querySelectorAll('.page-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected page content
+            document.getElementById(pageName).classList.add('active');
+            navItem.classList.add('active');
+            
+            // Update page header
+            updatePageHeader(pageName);
+        }
+        
+        function updatePageHeader(pageName) {
+            const titles = {
+                'excel-upload': {
+                    title: 'Excel Upload',
+                    description: 'Upload order data from Excel files and automatically sync with Google Sheets'
+                },
+                'email-automation': {
+                    title: 'Email Scanner',
+                    description: 'Configure email scanning settings for automated order detection'
+                },
+                'bulk-orders': {
+                    title: 'Bulk Orders',
+                    description: 'Process bulk orders and update tracking information'
+                },
+                'product-catalog': {
+                    title: 'Product Catalog',
+                    description: 'Manage your product inventory and listings'
+                },
+                'shipping-carriers': {
+                    title: 'Shipping Carriers',
+                    description: 'Manage your database of Etsy-approved last mile carriers'
+                },
+                'todo-notes': {
+                    title: 'Notes & Todos',
+                    description: 'Manage your tasks and notes'
+                }
+            };
+            
+            const pageInfo = titles[pageName];
+            if (pageInfo) {
+                document.getElementById('page-title').textContent = pageInfo.title;
+                document.getElementById('page-description').textContent = pageInfo.description;
+            }
+        }
+        
+        // Product search
+        function filterProducts() {
+            const searchTerm = document.getElementById('product-search').value.toLowerCase();
+            const rows = document.querySelectorAll('.product-row');
+            
+            rows.forEach(row => {
+                const productName = row.getAttribute('data-name');
+                if (productName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // Edit modal
+        function openEditModal(productId, productName, productPrice, listingLink, sourcingType, sourcingData) {
+            document.getElementById('edit-product-id').value = productId;
+            document.getElementById('edit-product-name').value = productName;
+            document.getElementById('edit-product-price').value = productPrice;
+            document.getElementById('edit-listing-link').value = listingLink || '';
+            document.getElementById('edit-sourcing-type').value = sourcingType || '';
+            document.getElementById('edit-sourcing-data').value = sourcingData || '';
+            document.getElementById('edit-modal').style.display = 'block';
+        }
+        
+        function openEditModalFromData(button) {
+            const productId = button.getAttribute('data-product-id');
+            const productName = button.getAttribute('data-product-name');
+            const productPrice = button.getAttribute('data-product-price');
+            const listingLink = button.getAttribute('data-listing-link');
+            const sourcingType = button.getAttribute('data-sourcing-type');
+            const sourcingData = button.getAttribute('data-sourcing-data');
+            openEditModal(productId, productName, productPrice, listingLink, sourcingType, sourcingData);
+        }
+        
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+        
+        // Image lightbox
+        function openLightbox(imageSrc, productName) {
+            document.getElementById('lightbox-image').src = imageSrc;
+            document.getElementById('lightbox-image').alt = productName;
+            document.getElementById('lightbox').style.display = 'block';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+        
+        // Todo functions
+        function confirmComplete(todoTitle) {
+            return confirm(`Mark "${todoTitle}" as complete?\n\nThis will remove the todo from your list.`);
+        }
+        
+        function openEditTodo(todoId, todoTitle, todoDescription) {
+            document.getElementById('edit-todo-id').value = todoId;
+            document.getElementById('edit-todo-title').value = todoTitle;
+            document.getElementById('edit-todo-description').value = todoDescription;
+            document.getElementById('edit-todo-modal').style.display = 'block';
+        }
+        
+        function closeEditTodoModal() {
+            document.getElementById('edit-todo-modal').style.display = 'none';
+        }
+        
+        // Sourcing data handling
+        function toggleSourcingData() {
+            const sourcingType = document.getElementById('sourcing-type').value;
+            const sourcingDataInput = document.getElementById('sourcing-data');
+            
+            if (sourcingType === 'link') {
+                sourcingDataInput.placeholder = 'Enter fulfillment link (e.g., https://supplier.com/product)';
+                sourcingDataInput.type = 'url';
+            } else if (sourcingType === 'agent') {
+                sourcingDataInput.placeholder = 'Enter agent details (e.g., Contact John for custom orders)';
+                sourcingDataInput.type = 'text';
+            } else {
+                sourcingDataInput.placeholder = 'Enter link or agent details';
+                sourcingDataInput.type = 'text';
+            }
+        }
+        
+        function toggleEditSourcingData() {
+            const sourcingType = document.getElementById('edit-sourcing-type').value;
+            const sourcingDataInput = document.getElementById('edit-sourcing-data');
+            
+            if (sourcingType === 'link') {
+                sourcingDataInput.placeholder = 'Enter fulfillment link (e.g., https://supplier.com/product)';
+                sourcingDataInput.type = 'url';
+            } else if (sourcingType === 'agent') {
+                sourcingDataInput.placeholder = 'Enter agent details (e.g., Contact John for custom orders)';
+                sourcingDataInput.type = 'text';
+            } else {
+                sourcingDataInput.placeholder = 'Enter link or agent details';
+                sourcingDataInput.type = 'text';
+            }
+        }
+        
+        // Carrier functions
+        function filterCarriers() {
+            const searchTerm = document.getElementById('carrier-search').value.toLowerCase();
+            const rows = document.querySelectorAll('.carrier-row');
+            
+            rows.forEach(row => {
+                const carrierName = row.getAttribute('data-name');
+                if (carrierName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function openEditCarrierModal(button) {
+            const carrierId = button.getAttribute('data-carrier-id');
+            const carrierName = button.getAttribute('data-carrier-name');
+            const etsyApproved = button.getAttribute('data-etsy-approved') === 'True';
+            const exampleTracking = button.getAttribute('data-example-tracking');
+            const alternativeText = button.getAttribute('data-alternative-text') || '';
+            
+            document.getElementById('edit-carrier-id').value = carrierId;
+            document.getElementById('edit-carrier-name').value = carrierName;
+            document.getElementById('edit-example-tracking').value = exampleTracking;
+            document.getElementById('edit-etsy-approved').checked = etsyApproved;
+            document.getElementById('edit-alternative-text').value = alternativeText;
+            document.getElementById('edit-carrier-modal').style.display = 'block';
+        }
+        
+        function closeEditCarrierModal() {
+            document.getElementById('edit-carrier-modal').style.display = 'none';
+        }
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const editModal = document.getElementById('edit-modal');
+            const editTodoModal = document.getElementById('edit-todo-modal');
+            const editCarrierModal = document.getElementById('edit-carrier-modal');
+            const lightbox = document.getElementById('lightbox');
+            
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+            if (event.target === editTodoModal) {
+                closeEditTodoModal();
+            }
+            if (event.target === editCarrierModal) {
+                closeEditCarrierModal();
+            }
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+        }
+        
+        // Initialize the page on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the current page from the server
+            const currentPage = '{{ current_page }}';
+            
+            // Find the corresponding nav item and activate it
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                const onclick = item.getAttribute('onclick');
+                if (onclick && onclick.includes(`'${currentPage}'`)) {
+                    switchPage(currentPage, item);
+                }
+            });
+            
+            // If no specific page was set, default to excel-upload
+            if (!currentPage || currentPage === 'excel-upload') {
+                const defaultNavItem = document.querySelector('.nav-item[onclick*="excel-upload"]');
+                if (defaultNavItem) {
+                    switchPage('excel-upload', defaultNavItem);
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

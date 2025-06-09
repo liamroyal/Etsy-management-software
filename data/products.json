@@ -1,0 +1,70 @@
+[
+  {
+    "id": "f880af6c-8c4f-457d-85e2-db32eebfff09",
+    "name": "Linen Kaftan Dress",
+    "price_nzd": 37.0,
+    "image": "f880af6c-8c4f-457d-85e2-db32eebfff09.png",
+    "created_at": "2025-06-05T15:49:12.092060",
+    "listing_link": "https://www.etsy.com/nz/listing/4312777944/linen-kaftan-dress-women-loose-fit-v?click_key=129ac85790783f041439aaae062b0c75b25f03f5%3A4312777944&click_sum=09d6e904&ref=shop_home_active_2&pro=1&frs=1"
+  },
+  {
+    "id": "4fdfa36c-06a2-442f-94db-1b24c53f6699",
+    "name": "Linen cotton maxi dress",
+    "price_nzd": 65.5,
+    "image": "4fdfa36c-06a2-442f-94db-1b24c53f6699.png",
+    "created_at": "2025-06-05T15:49:12.093855"
+  },
+  {
+    "id": "ea4ddc56-1fc7-41b9-af63-2b5a7ffff248",
+    "name": "Linen Tank Top",
+    "price_nzd": 31.5,
+    "image": "ea4ddc56-1fc7-41b9-af63-2b5a7ffff248.png",
+    "created_at": "2025-06-05T15:51:27.472843",
+    "listing_link": "https://www.etsy.com/nz/listing/4304554321/linen-tank-top-women-sleeveless-blouse?transaction_id=4606566710"
+  },
+  {
+    "id": "1abb34e9-48f9-4465-b00a-95c2801e7407",
+    "name": "Cotton blouse",
+    "price_nzd": 43.6,
+    "image": "1abb34e9-48f9-4465-b00a-95c2801e7407.png",
+    "created_at": "2025-06-05T16:05:59.652351"
+  },
+  {
+    "id": "1a3bb7f7-5d58-4e10-967b-fd57cfbdf123",
+    "name": "Linen midi dress",
+    "price_nzd": 37.2,
+    "image": "1a3bb7f7-5d58-4e10-967b-fd57cfbdf123.png",
+    "created_at": "2025-06-05T16:07:02.826618",
+    "listing_link": "https://www.etsy.com/nz/listing/4307425001/linen-style-midi-dress-loose-pleated?transaction_id=4623669173"
+  },
+  {
+    "id": "404cf5a5-ea30-4a26-93d0-ed65694b8a77",
+    "name": "Linen harem",
+    "price_nzd": 43.5,
+    "image": "404cf5a5-ea30-4a26-93d0-ed65694b8a77.png",
+    "listing_link": null,
+    "created_at": "2025-06-05T16:18:01.797821",
+    "sourcing_type": "agent",
+    "sourcing_data": "JT Bill"
+  },
+  {
+    "id": "cc38f0a1-e5df-4dda-aa7b-de2b022ab409",
+    "name": "Linen Bloomers",
+    "price_nzd": 55.5,
+    "image": "cc38f0a1-e5df-4dda-aa7b-de2b022ab409.png",
+    "listing_link": null,
+    "created_at": "2025-06-05T16:26:00.394060",
+    "sourcing_type": "agent",
+    "sourcing_data": "JT Bill"
+  },
+  {
+    "id": "5b2f5a31-391d-42c1-a413-644ce590202c",
+    "name": "Gingham Cotton Dress",
+    "price_nzd": 55.2,
+    "image": "5b2f5a31-391d-42c1-a413-644ce590202c.png",
+    "listing_link": "https://www.etsy.com/nz/listing/4312271247/blue-gingham-cotton-linen-dress-puff?transaction_id=4605217840",
+    "created_at": "2025-06-07T09:58:31.568103",
+    "sourcing_type": "agent",
+    "sourcing_data": "JT Bill"
+  }
+]
